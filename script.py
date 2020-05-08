@@ -6,7 +6,7 @@ from azure.storage.blob import BlobServiceClient
 from azure.core.exceptions import ResourceNotFoundError
 import os
 
-measure_time = datetime.utcnow().strftime('%H:%M:%S')
+measure_utc_time = datetime.utcnow().strftime('%H:%M:%S')
 
 request = requests.get('http://192.168.1.1/api/1.0/?method=lan.getHostsList')
 
@@ -33,7 +33,7 @@ for child_node in rsp_node.childNodes:
             for key in output_keys:
                 connected_devices_output_string += '"' + child_node.getAttribute(key) + '",'
             
-            connected_devices_output_string += measure_time + '\n'
+            connected_devices_output_string += measure_utc_time + '\n'
             
 connection_string = os.environ['AZURE_STORAGE_SELFDATA_CONNECTION_STRING']
 blob_service_client = BlobServiceClient.from_connection_string(conn_str=connection_string)
@@ -53,6 +53,6 @@ except ResourceNotFoundError:
     blob_client.create_append_blob()
     
     # Initial content provides headers
-    blob_initial_content = ','.join(output_keys) + ',measure_time' + '\n' + connected_devices_output_string
+    blob_initial_content = ','.join(output_keys) + ',measure_utc_time' + '\n' + connected_devices_output_string
     blob_client.append_block(blob_initial_content)
     
