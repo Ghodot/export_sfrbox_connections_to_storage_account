@@ -6,7 +6,7 @@ from azure.storage.blob import BlobServiceClient
 from azure.core.exceptions import ResourceNotFoundError
 import os
 
-measure_time = datetime.now().strftime('%H:%M:%S')
+measure_time = datetime.utcnow().strftime('%H:%M:%S')
 
 request = requests.get('http://192.168.1.1/api/1.0/?method=lan.getHostsList')
 
